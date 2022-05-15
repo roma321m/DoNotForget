@@ -4,6 +4,7 @@
     package="roman.app.donotforget" >
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -25,6 +26,12 @@
             </intent-filter>
         </activity>
         <service android:name=".ForegroundServiceManager" />
+        <receiver android:name=".BroadcastReceiverManager"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
