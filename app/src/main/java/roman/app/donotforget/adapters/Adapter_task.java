@@ -1,4 +1,4 @@
-package roman.app.donotforget;
+package roman.app.donotforget.adapters;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -12,6 +12,9 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
+
+import roman.app.donotforget.R;
+import roman.app.donotforget.data.Task;
 
 public class Adapter_task extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

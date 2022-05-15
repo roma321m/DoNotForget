@@ -1,4 +1,4 @@
-package roman.app.donotforget;
+package roman.app.donotforget.validators;
 
 import android.text.Editable;
 import android.text.TextWatcher;

@@ -1,24 +1,27 @@
-package roman.app.donotforget;
+package roman.app.donotforget.data;
 
 import androidx.annotation.NonNull;
 
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Objects;
 
 public class Task {
     private String description;
-    private Date initiationTime;
+    private long initiationTime;
 
     public Task() {
     }
 
     public Task(String description) {
-        initiationTime = Calendar.getInstance().getTime();
+        initiationTime = Calendar.getInstance().getTime().getTime();
         if (description == null || description.isEmpty()) {
             this.description = "Default";
             return;
         }
+        this.description = description;
+    }
+
+    public Task(String description, long initiationTime) {
+        this.initiationTime = initiationTime;
         this.description = description;
     }
 
@@ -31,26 +34,13 @@ public class Task {
         return this;
     }
 
-    public Date getInitiationTime() {
+    public long getInitiationTime() {
         return initiationTime;
     }
 
-    public Task setInitiationTime(Date initiationTime) {
+    public Task setInitiationTime(long initiationTime) {
         this.initiationTime = initiationTime;
         return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
-        return getInitiationTime().equals(task.getInitiationTime());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getInitiationTime());
     }
 
     @NonNull

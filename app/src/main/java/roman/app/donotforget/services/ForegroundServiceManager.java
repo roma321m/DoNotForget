@@ -1,4 +1,4 @@
-package roman.app.donotforget;
+package roman.app.donotforget.services;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -9,6 +9,9 @@ import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+
+import roman.app.donotforget.R;
+import roman.app.donotforget.activities.MainActivity;
 
 public class ForegroundServiceManager extends Service {
 
@@ -34,7 +37,7 @@ public class ForegroundServiceManager extends Service {
             @Override
             public void run() {
                 while (true) {
-                    Log.e("Service", "Service running");
+                    Log.e(MainActivity.TAG_SERVICE, "Service running");
                     // TODO: 15/05/2022 check the tasks
                     try {
                         Thread.sleep(1000);

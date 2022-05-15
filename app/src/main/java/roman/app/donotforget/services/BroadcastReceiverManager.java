@@ -1,4 +1,4 @@
-package roman.app.donotforget;
+package roman.app.donotforget.services;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

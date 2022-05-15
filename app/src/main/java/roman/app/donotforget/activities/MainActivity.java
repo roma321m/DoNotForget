@@ -1,4 +1,4 @@
-package roman.app.donotforget;
+package roman.app.donotforget.activities;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -18,7 +18,17 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 
+import roman.app.donotforget.adapters.Adapter_task;
+import roman.app.donotforget.services.ForegroundServiceManager;
+import roman.app.donotforget.R;
+import roman.app.donotforget.validators.Validator;
+import roman.app.donotforget.data.DataManager;
+import roman.app.donotforget.data.Task;
+
 public class MainActivity extends AppCompatActivity {
+
+    public static final String TAG_SQL= "sql";
+    public static final String TAG_SERVICE = "service";
 
     private TextInputLayout main_textInputLayout;
     private TextInputEditText main_textInputEditText;
