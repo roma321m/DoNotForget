@@ -1,5 +1,8 @@
 package roman.app.donotforget;
 
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -33,9 +36,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (!serviceRunning(ForegroundServiceManager.class)) {
+            Intent serviceIntent = new Intent(this, ForegroundServiceManager.class);
+            startForegroundService(serviceIntent);
+        }
+
         dataManager = DataManager.getInstance();
 
         findViews();
+        setTasks(dataManager.getTasks());
 
         validator = Validator.Builder.make(main_textInputLayout)
                 .addWatcher(new Validator.Watcher_NotEmpty("Can't be empty"))
@@ -50,18 +59,17 @@ public class MainActivity extends AppCompatActivity {
         main_BTN_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (validator.validateIt()){
+                if (validator.validateIt()) {
                     addNewTask();
-                }
-                else{
+                } else {
                     main_textInputEditText.setText("");
                 }
             }
         });
     }
 
-    private void addNewTask(){
-        dataManager.addTask(new Task(main_textInputEditText.getText()+""));
+    private void addNewTask() {
+        dataManager.addTask(new Task(main_textInputEditText.getText() + ""));
         setTasks(dataManager.getTasks());
         main_textInputEditText.clearFocus();
         main_textInputEditText.getText().clear();
@@ -76,6 +84,16 @@ public class MainActivity extends AppCompatActivity {
             // TODO: 15/05/2022 - clicked done - pop up dialog box.
             Toast.makeText(MainActivity.this, "done clicked - " + task.getDescription(), Toast.LENGTH_SHORT).show(); // temp
         });
+    }
+
+    public boolean serviceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void findViews() {

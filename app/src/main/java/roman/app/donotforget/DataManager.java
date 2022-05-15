@@ -5,6 +5,8 @@ import android.content.Context;
 import java.util.ArrayList;
 
 public class DataManager {
+    public static int MAX_TIME_IN_HOURS = 5;
+
     private static DataManager single_instance = null;
     private Context context;
 
@@ -33,5 +35,9 @@ public class DataManager {
     public void addTask(Task task) {
         if (task != null)
             tasks.add(task);
+    }
+
+    public int getSize(){
+        return tasks.size();
     }
 }
