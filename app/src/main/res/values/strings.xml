@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DoNotForget</string>
+    <string name="hint">Add your task here</string>
+    <string name="button_add">Add Task</string>
 </resources>
