@@ -48,12 +48,19 @@ public class DataManager {
         }
     }
 
+    public void removeTask(Task task) {
+        tasks.remove(task);
+        boolean t = sqLiteDBManager.deleteFromDB(task);
+        if (t)
+            Log.e(MainActivity.TAG_SQL, "task deleted " + task.toString());
+        else
+            Log.e(MainActivity.TAG_SQL, "error while deleting a task " + task.toString());
+    }
+
     private void setDataFromSQLite() {
-        Cursor cursor = sqLiteDBManager.readFromDB();
-        if (cursor.getCount()==0)
+        ArrayList<Task> t = sqLiteDBManager.readFromDB();
+        if (t.isEmpty())
             return;
-        while (cursor.moveToNext()) {
-            tasks.add(new Task(cursor.getString(1), cursor.getInt(2)));
-        }
+        tasks = t;
     }
 }

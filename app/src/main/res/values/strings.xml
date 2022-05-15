@@ -4,4 +4,7 @@
     <string name="button_add">Add Task</string>
     <string name="task_description">task text here</string>
     <string name="button_done">Done</string>
+    <string name="dialog_title">title</string>
+    <string name="dialog_body">body here</string>
+    <string name="button_dialog_confirm">confirm</string>
 </resources>

@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+
 public class SQLiteDBManager extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "DoNotForget_database";
@@ -15,11 +17,9 @@ public class SQLiteDBManager extends SQLiteOpenHelper {
     public static final String TASKS_COLUMN_INITIATION = "initiation";
 
     private static SQLiteDBManager single_instance = null;
-    private Context context;
 
     private SQLiteDBManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.context = context;
     }
 
     public static SQLiteDBManager initHelper(Context context) {
@@ -55,13 +55,38 @@ public class SQLiteDBManager extends SQLiteOpenHelper {
         values.put(TASKS_COLUMN_DESCRIPTION, task.getDescription());
         values.put(TASKS_COLUMN_INITIATION, task.getInitiationTime());
         long newRowId = database.insert(TASKS_TABLE_NAME, null, values);
-        if (newRowId == -1)
+        if (newRowId == -1) {
+            database.close();
             return false;
+        }
+        database.close();
         return true;
     }
 
-    public Cursor readFromDB() {
+    public boolean deleteFromDB(Task task) {
+        SQLiteDatabase database = single_instance.getWritableDatabase();
+        // FIXME: 15/05/2022 - bug in the delete from db
+        int row = database.delete(TASKS_TABLE_NAME, TASKS_COLUMN_INITIATION + "=?", new String[]{task.getInitiationTime() + ""});
+        if (row == -1) {
+            database.close();
+            return false;
+        }
+        database.close();
+        return true;
+    }
+
+    public ArrayList<Task> readFromDB() {
         SQLiteDatabase database = single_instance.getReadableDatabase();
-        return database.rawQuery("SELECT * FROM "+TASKS_TABLE_NAME,null);
+        Cursor cursor = database.rawQuery("SELECT * FROM " + TASKS_TABLE_NAME, null);
+        if (cursor.getCount() == 0) {
+            database.close();
+            return new ArrayList<>();
+        }
+        ArrayList<Task> tasks = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            tasks.add(new Task(cursor.getString(1), cursor.getInt(2)));
+        }
+        database.close();
+        return tasks;
     }
 }

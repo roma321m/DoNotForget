@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -18,16 +17,17 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 
-import roman.app.donotforget.adapters.Adapter_task;
-import roman.app.donotforget.services.ForegroundServiceManager;
 import roman.app.donotforget.R;
-import roman.app.donotforget.validators.Validator;
+import roman.app.donotforget.adapters.Adapter_task;
 import roman.app.donotforget.data.DataManager;
 import roman.app.donotforget.data.Task;
+import roman.app.donotforget.dialog.ViewDialog_Confirmation;
+import roman.app.donotforget.services.ForegroundServiceManager;
+import roman.app.donotforget.validators.Validator;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String TAG_SQL= "sql";
+    public static final String TAG_SQL = "sql";
     public static final String TAG_SERVICE = "service";
 
     private TextInputLayout main_textInputLayout;
@@ -86,13 +86,20 @@ public class MainActivity extends AppCompatActivity {
         main_textInputLayout.setError("");
     }
 
+    private void deleteTask(Task task) {
+        dataManager.removeTask(task);
+        setTasks(dataManager.getTasks());
+    }
+
     private void setTasks(ArrayList<Task> tasks) {
         Adapter_task adapter_task = new Adapter_task(this, tasks);
         main_LST_tasks.setAdapter(adapter_task);
 
         adapter_task.setTaskClickListener(task -> {
-            // TODO: 15/05/2022 - clicked done - pop up dialog box.
-            Toast.makeText(MainActivity.this, "done clicked - " + task.getDescription(), Toast.LENGTH_SHORT).show(); // temp
+            ViewDialog_Confirmation viewDialog_confirmation = new ViewDialog_Confirmation();
+            viewDialog_confirmation.showDialog(this, "Confirm Done",
+                    "Please confirm that you are done with this task and you want to delete it form the list",
+                    () -> deleteTask(task));
         });
     }
 
