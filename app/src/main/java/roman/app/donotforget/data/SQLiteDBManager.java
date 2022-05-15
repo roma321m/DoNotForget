@@ -38,7 +38,7 @@ public class SQLiteDBManager extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("CREATE TABLE " + TASKS_TABLE_NAME + " (" +
                 TASKS_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 TASKS_COLUMN_DESCRIPTION + " TEXT, " +
-                TASKS_COLUMN_INITIATION + " LONG" + ")");
+                TASKS_COLUMN_INITIATION + " INTEGER" + ")");
     }
 
     @Override
@@ -65,8 +65,7 @@ public class SQLiteDBManager extends SQLiteOpenHelper {
 
     public boolean deleteFromDB(Task task) {
         SQLiteDatabase database = single_instance.getWritableDatabase();
-        // FIXME: 15/05/2022 - bug in the delete from db
-        int row = database.delete(TASKS_TABLE_NAME, TASKS_COLUMN_INITIATION + "=?", new String[]{task.getInitiationTime() + ""});
+        int row = database.delete(TASKS_TABLE_NAME, TASKS_COLUMN_INITIATION + "=" + task.getInitiationTime(), null);
         if (row == -1) {
             database.close();
             return false;
@@ -84,7 +83,7 @@ public class SQLiteDBManager extends SQLiteOpenHelper {
         }
         ArrayList<Task> tasks = new ArrayList<>();
         while (cursor.moveToNext()) {
-            tasks.add(new Task(cursor.getString(1), cursor.getInt(2)));
+            tasks.add(new Task(cursor.getString(1), cursor.getLong(2)));
         }
         database.close();
         return tasks;

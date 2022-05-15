@@ -5,15 +5,18 @@ import android.database.Cursor;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import roman.app.donotforget.activities.MainActivity;
 
 public class DataManager {
     public static int MAX_TIME_IN_HOURS = 5;
+    public static int HOUR_TO_MILLIS = 3600000;
 
     private static DataManager single_instance = null;
     private Context context;
     private SQLiteDBManager sqLiteDBManager;
+    private boolean stateChanged;
 
     private ArrayList<Task> tasks;
 
@@ -22,6 +25,7 @@ public class DataManager {
         tasks = new ArrayList<>();
         sqLiteDBManager = SQLiteDBManager.getInstance();
         setDataFromSQLite();
+        stateChanged = isAllGood();
     }
 
     public static DataManager initHelper(Context context) {
@@ -62,5 +66,25 @@ public class DataManager {
         if (t.isEmpty())
             return;
         tasks = t;
+    }
+
+    public boolean isStateChanged(){
+        if (stateChanged != isAllGood()){
+            stateChanged = !stateChanged;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isAllGood(){
+        if (tasks.size() == 0)
+            return true;
+        return calc(tasks.get(0).getInitiationTime());
+    }
+
+    private boolean calc(long time){
+        long dif = Calendar.getInstance().getTimeInMillis() - time;
+        return MAX_TIME_IN_HOURS * HOUR_TO_MILLIS > dif;
+        //return 20000 > dif; // for testing 20 sec
     }
 }

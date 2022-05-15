@@ -12,7 +12,7 @@ public class Task {
     }
 
     public Task(String description) {
-        initiationTime = Calendar.getInstance().getTime().getTime();
+        initiationTime = Calendar.getInstance().getTimeInMillis();
         if (description == null || description.isEmpty()) {
             this.description = "Default";
             return;
